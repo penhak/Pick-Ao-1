@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>申奥 · Pick Ao · 个人说明书</title>
+  <!-- 优雅字体 Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <!-- Font Awesome 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #0b0f19;
+      color: #eef2fb;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* 自定义光标光晕 */
+    .cursor-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(14, 165, 233, 0.02) 60%, transparent 80%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: opacity 0.2s;
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      will-change: left, top;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 15, 25, 0.7);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      padding: 0.7rem 2rem;
+      background: rgba(8, 12, 20, 0.85);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, #7dd3fc 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #38bdf8;
+      transition: width 0.3s;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .nav-links a:hover {
+      color: #f0f9ff;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    section {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+      display: inline-block;
+      background: linear-gradient(to right, #f0f9ff, #bae6fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      border-radius: 4px;
+    }
+
+    /* 滚动动画 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #e0f2fe, #a5f3fc, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #9ca3af;
+      max-width: 550px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: #0ea5e9;
+      color: #0b0f19;
+      box-shadow: 0 8px 20px -8px #0284c7;
+    }
+
+    .btn-primary:hover {
+      background: #38bdf8;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -8px #0369a1;
+    }
+
+    .btn-outline {
+      border: 1px solid #38bdf8;
+      color: #e0f2fe;
+    }
+
+    .btn-outline:hover {
+      background: rgba(56, 189, 248, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .code-orb {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.8));
+      border-radius: 50%;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 70px rgba(14, 165, 233, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: float 8s infinite;
+    }
+
+    .code-orb i {
+      font-size: 6rem;
+      color: #bae6fd;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.02); }
+    }
+
+    /* 玻璃卡片 */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 32px;
+      padding: 2.2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .glass-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-6px);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .skill-tag {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid #1e3a5f;
+      color: #bae6fd;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .skill-tag:hover {
+      background: #0ea5e9;
+      color: #0b0f19;
+    }
+
+    /* 技能网格卡片 */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid #2d3a52;
+      border-radius: 24px;
+      padding: 1.8rem 1.5rem;
+      transition: all 0.25s;
+    }
+
+    .skill-card:hover {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .skill-card i {
+      font-size: 2rem;
+      color: #38bdf8;
+      margin-bottom: 1rem;
+    }
+
+    /* 作品卡片 */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid #1e293b;
+      border-radius: 28px;
+      padding: 2rem 1.8rem;
+      transition: all 0.35s;
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: scale(1.02) translateY(-8px);
+      border-color: #38bdf8;
+      box-shadow: 0 30px 40px -20px #0284c7;
+    }
+
+    .project-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #7dd3fc;
+    }
+
+    .project-tags span {
+      background: #1e293b;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      color: #9cc9f5;
+      margin-right: 6px;
+    }
+
+    /* 联系区域 */
+    .contact-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.9rem 1.5rem;
+      border-radius: 60px;
+      border: 1px solid #2d3a52;
+    }
+
+    .contact-item i {
+      color: #38bdf8;
+      width: 1.5rem;
+    }
+
+    .social-links a {
+      color: #94a3b8;
+      font-size: 1.8rem;
+      margin-left: 1.5rem;
+      transition: all 0.2s;
+    }
+
+    .social-links a:hover {
+      color: #38bdf8;
+      transform: translateY(-3px);
+    }
+
+    /* 复制功能样式 */
+    .copyable {
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .copyable:hover {
+      background: rgba(56, 189, 248, 0.15) !important;
+      border-color: #38bdf8 !important;
+      transform: scale(0.98);
+    }
+
+    .copyable:active {
+      transform: scale(0.96);
+    }
+
+    /* 轻提示 (toast) */
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0ea5e9;
+      color: #0b0f19;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      border: 1px solid #7dd3fc;
+    }
+
+    .toast-message.show {
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    /* 页脚 */
+    footer {
+      background: #070b14;
+      border-top: 1px solid #1e293b;
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #a5f3fc 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      margin: 0 1rem;
+      text-decoration: none;
+    }
+
+    .footer-copy {
+      color: #64748b;
+    }
+
+    /* 响应式 */
+    @media (max-width: 800px) {
+      .hero-content, .about-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { gap: 1.2rem; }
+      .hero-text h1 { font-size: 2.8rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <!-- 全局复制提示 -->
+  <div id="copyToast" class="toast-message">📋 已复制到剪贴板</div>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="logo">PICK AO</div>
+      <div class="nav-links">
+        <a href="#home">首页</a>
+        <a href="#about">关于</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">作品</a>
+        <a href="#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="bg-grid"></div>
+      <div class="container hero-content">
+        <div class="hero-text reveal">
+          <h1>
+            <span class="gradient-text">Hi！我是申奥</span><br>
+            这是我的个人说明书
+          </h1>
+          <p>昵称 Pick Ao · 摄影/设计/硬件/玄学 · 好奇心驱动，理性浪漫。进一步了解我请划到最后。</p>
+          <div class="hero-buttons">
+            <a href="#contact" class="btn btn-primary"><i class="fas fa-comment"></i> 联系我</a>
+            <a href="#projects" class="btn btn-outline"><i class="fas fa-arrow-down"></i> 看作品</a>
+          </div>
+        </div>
+        <div class="hero-visual reveal">
+          <div class="code-orb">
+            <i class="fas fa-user-astronaut"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于 + 基本信息 -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title reveal">/ 基本信息</h2>
+        <div class="about-grid">
+          <div class="glass-card reveal">
+            <p style="font-size: 1.4rem; margin-bottom: 1rem;">👋 申奥 · Pick Ao</p>
+            <p>你好！我叫申奥，你可以叫我 Pick Ao。这是我的个人说明书，你可以在这里快速了解到我。</p>
+            <p style="margin-top: 1.5rem;">📌 如果需要找我沟通 (点击即可复制) ：</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+              <span class="copyable" data-copy="19139970991" style="background:#1e293b; padding:0.4rem 1.2rem; border-radius:30px; display:inline-flex; align-items:center; gap:8px;"><i class="fas fa-phone"></i> 19139970991</span>
+              <span class="copyable" data-copy="sa1420810558" style="background:#1e293b; padding:0.4rem 1.2rem; border-radius:30px; display:inline-flex; align-items:center; gap:8px;"><i class="fab fa-weixin"></i> sa1420810558</span>
+              <span class="copyable" data-copy="1420810558" style="background:#1e293b; padding:0.4rem 1.2rem; border-radius:30px; display:inline-flex; align-items:center; gap:8px;"><i class="fab fa-qq"></i> 1420810558</span>
+              <span class="copyable" data-copy="1420810558@qq.com" style="background:#1e293b; padding:0.4rem 1.2rem; border-radius:30px; display:inline-flex; align-items:center; gap:8px;"><i class="fas fa-envelope"></i> 1420810558@qq.com</span>
+            </div>
+            <p style="margin-top: 1.8rem; color: #9ca3af;">📍 设备：索尼6700（18135+适马1770）</p>
+          </div>
+          <div class="glass-card reveal">
+            <h3 style="margin-bottom: 1.5rem;">✨ 多元技能图谱</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">摄影摄像</span><span class="skill-tag">达芬奇</span><span class="skill-tag">剪映</span><span class="skill-tag">AE</span>
+              <span class="skill-tag">Ps</span><span class="skill-tag">即时设计</span><span class="skill-tag">AI工作流</span><span class="skill-tag">AI视频策划</span>
+              <span class="skill-tag">PCBA设计</span><span class="skill-tag">独立开发</span><span class="skill-tag">餐饮/调酒</span><span class="skill-tag">甜点</span>
+              <span class="skill-tag">象棋</span><span class="skill-tag">理财(年20%+)</span><span class="skill-tag">素描</span>
+              <span class="skill-tag">六爻</span><span class="skill-tag">风水</span><span class="skill-tag">手相</span><span class="skill-tag">塔罗</span><span class="skill-tag">纯爱好勿信</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 详细技能 -->
+    <section id="skills">
+      <div class="container">
+        <h2 class="section-title reveal">/ 掌握技能</h2>
+        <div class="skills-grid reveal">
+          <div class="skill-card"><i class="fas fa-camera"></i><h3>摄影摄像</h3><p>索尼6700，熟练运用18135与适马1770，作品展示见自媒体。</p></div>
+          <div class="skill-card"><i class="fas fa-video"></i><h3>视频剪辑</h3><p>达芬奇调色、剪映快速产出、AE动效，全流程把控。</p></div>
+          <div class="skill-card"><i class="fas fa-paint-brush"></i><h3>平面设计</h3><p>Ps精修、即时设计UI，具备独立视觉输出能力。</p></div>
+          <div class="skill-card"><i class="fas fa-robot"></i><h3>AI工作流</h3><p>AI辅助策划、视频脚本、运营提效，紧跟AIGC趋势。</p></div>
+          <div class="skill-card"><i class="fas fa-microchip"></i><h3>硬件设计</h3><p>PCBA设计，独立开发过硬件项目，软硬结合。</p></div>
+          <div class="skill-card"><i class="fas fa-chess"></i><h3>生活技艺</h3><p>餐饮美食、调酒甜点；象棋业余；素描基础；理财年化20%+。</p></div>
+          <div class="skill-card"><i class="fas fa-magic"></i><h3>古代玄学</h3><p>六爻、风水、手相、塔罗牌——纯爱好，别信，图一乐。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 作品 & 自媒体 -->
+    <section id="projects">
+      <div class="container">
+        <h2 class="section-title reveal">/ 自媒体 & 项目</h2>
+        <div class="projects-grid">
+          <div class="project-card reveal">
+            <div class="project-icon"><i class="fas fa-hashtag"></i></div>
+            <h3>Pick Ao · 数码科技</h3>
+            <p>账号昵称：Pick Ao · 数码科技产品推荐、摄影器材作品展示。合作形式：图文、视频、寄拍、产品置换等。</p>
+            <div class="project-tags"><span>数码科技</span><span>摄影器材</span><span>寄拍</span></div>
+            <p style="margin-top: 1rem; font-size:0.9rem;"><i class="fas fa-file-invoice"></i> 报价表 · 选题详见飞书</p>
+          </div>
+          <div class="project-card reveal">
+            <div class="project-icon"><i class="fas fa-microchip"></i></div>
+            <h3>独立硬件项目</h3>
+            <p>PCBA设计与开发，从原理图到成品落地，具备完整的硬件产品经验。</p>
+            <div class="project-tags"><span>PCBA</span><span>嵌入式</span></div>
+          </div>
+          <div class="project-card reveal">
+            <div class="project-icon"><i class="fas fa-box-open"></i></div>
+            <h3>人生管理系统 · 百宝箱</h3>
+            <p>个人效率工具与知识库，包含Notion模板、资源归档。正在迭代中。</p>
+            <div class="project-tags"><span>效率工具</span><span>知识管理</span></div>
+          </div>
+        </div>
+        <div class="glass-card reveal" style="margin-top: 2rem; text-align: center;">
+          <p><i class="fas fa-link"></i> 我的飞书基本信息 & 简历：<a href="#" style="color:#7dd3fc;">my.feishu.cn/sync/Rl3BdHm4UsN9XCbJPnvcReEzn5c</a> (示意链接)</p>
+          <p style="margin-top: 0.8rem;">😃 人生管理系统 · 百宝箱 · 简历 —— 来都来了，点个赞再走吧～</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系 (含复制功能) -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title reveal">/ 联系我 (点击复制)</h2>
+        <div class="glass-card reveal">
+          <div class="contact-flex">
+            <div class="contact-grid">
+              <div class="contact-item copyable" data-copy="19139970991"><i class="fas fa-phone-alt"></i> 19139970991</div>
+              <div class="contact-item copyable" data-copy="sa1420810558"><i class="fab fa-weixin"></i> sa1420810558</div>
+              <div class="contact-item copyable" data-copy="1420810558"><i class="fab fa-qq"></i> 1420810558</div>
+              <div class="contact-item copyable" data-copy="1420810558@qq.com"><i class="fas fa-envelope"></i> 1420810558@qq.com</div>
+            </div>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-github"></i></a>
+              <a href="#"><i class="fab fa-bilibili"></i></a>
+              <a href="#"><i class="fab fa-xiaohongshu"></i></a>
+            </div>
+          </div>
+          <p style="margin-top: 2rem; color: #9ca3af;">📬 自媒体账号「Pick Ao」数码科技 · 欢迎合作交流。</p>
+          <hr style="border-color:#1e293b; margin: 1.5rem 0;">
+          <p style="text-align: right; font-style: italic;">—— 申奥 · Pick Ao</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">PICK AO</div>
+      <div class="footer-links">
+        <a href="#about">关于</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">作品</a>
+        <a href="#contact">联系</a>
+      </div>
+      <div class="footer-copy">© 2026 申奥 · Built with ☕ and curiosity.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      // 光标光晕
+      const glow = document.getElementById('cursorGlow');
+      document.addEventListener('mousemove', (e) => {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+      });
+
+      // 导航栏滚动
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+      });
+
+      // 滚动显示动画
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.15 });
+      reveals.forEach(el => observer.observe(el));
+      window.addEventListener('load', () => {
+        reveals.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.85) el.classList.add('active');
+        });
+      });
+
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === "#" || href === "") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            const offset = 80;
+            const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // ---------- 点击复制功能 + 轻提示 ----------
+      const toast = document.getElementById('copyToast');
+      let toastTimeout = null;
+
+      function showToast(message = '📋 已复制到剪贴板') {
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      }
+
+      // 为所有带 .copyable 类的元素添加点击复制
+      const copyElements = document.querySelectorAll('.copyable');
+      
+      copyElements.forEach(el => {
+        el.addEventListener('click', async (e) => {
+          e.stopPropagation();  // 避免意外触发父级
+          const textToCopy = el.getAttribute('data-copy') || el.innerText.replace(/^\s*[📱📧💬📞]\s*/, '').trim();
+          
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            showToast(`📋 已复制: ${textToCopy}`);
+            // 微反馈：添加临时类（可选）
+            el.style.transition = 'all 0.15s';
+            el.style.backgroundColor = '#0ea5e9';
+            el.style.color = '#0b0f19';
+            setTimeout(() => {
+              el.style.backgroundColor = '';
+              el.style.color = '';
+            }, 150);
+          } catch (err) {
+            // 降级方案（老浏览器）
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(`📋 已复制: ${textToCopy}`);
+          }
+        });
+
+        // 增加悬停提示（title属性）
+        const originalTitle = el.getAttribute('title');
+        if (!originalTitle) {
+          el.setAttribute('title', '点击复制');
+        }
+      });
+
+      // 对于非 copyable 但可能也需要复制的旧元素（兼容）
+      // 已经全部转为 copyable 类
+    })();
+  </script>
+</body>
+</html>
